@@ -1,7 +1,8 @@
 // app/layout.tsx
 import './globals.css';
-import { AuthContextProvider } from '../context/AuthContext';
-
+// import { AuthContextProvider } from '../context/TelegramAuthContext';
+import { AuthContextProvider } from '@/context/AuthContext';
+import '../flow-config';
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -9,7 +10,8 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body>
+			<body suppressHydrationWarning={true}>
+
 				<AuthContextProvider>{children}</AuthContextProvider>
 			</body>
 		</html>

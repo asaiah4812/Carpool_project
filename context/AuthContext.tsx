@@ -1,57 +1,30 @@
-// app/context/AuthContext.tsx
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import WebApp from '@twa-dev/sdk';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { createContext, useContext } from 'react';
+import useCurrentUser from '@/hooks/use-current-user.hook';
+import '../flow-config'; // Import the flow-config to ensure the configuration is applied
 
-type AuthContextType = {
-	userID: number | null;
-	username: string | null;
-	windowHeight: number;
-};
+interface AuthContextType {
+    user: any;
+    loggedIn: any;
+    logIn: any;
+    logOut: any;
+    error: any;
+}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthContextProvider = ({
-	children,
-}: {
-	children: React.ReactNode;
+export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
+    children,
 }) => {
-	const [windowHeight, setWindowHeight] = useState<number>(0);
-	const [userID, setUserID] = useState<number | null>(null);
-	const [username, setUsername] = useState<string | null>(null);
+    const [user, loggedIn, logIn, logOut, error] = useCurrentUser();
 
-	useEffect(() => {
-		// Ensure this code only runs on the client side
-		if (typeof window !== 'undefined' && WebApp) {
-			WebApp.isVerticalSwipesEnabled = false;
-			setWindowHeight(WebApp.viewportStableHeight || window.innerHeight);
-			WebApp.ready();
-
-			// Set Telegram user data
-			const user = WebApp.initDataUnsafe.user;
-			setUserID(user?.id || null);
-			setUsername(user?.username || null);
-		}
-	}, []);
-
-	const contextValue = {
-		userID,
-		username,
-		windowHeight,
-	};
-
-	return (
-		<AuthContext.Provider value={contextValue}>
-			{children}
-		</AuthContext.Provider>
-	);
+    return (
+        <AuthContext.Provider value={{ user, loggedIn, logIn, logOut, error }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
-export const useAuth = () => {
-	const context = useContext(AuthContext);
-	if (context === undefined) {
-		throw new Error('useAuth must be used within an AuthContextProvider');
-	}
-	return context;
-};
+export const useAuth = () => useContext(AuthContext);
