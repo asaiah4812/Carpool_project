@@ -3,54 +3,54 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import WebApp from '@twa-dev/sdk';
 
-type AuthContextType = {
-	userID: number | null;
-	username: string | null;
-	windowHeight: number;
+type TelegramAuthContextType = {
+    userID: number | null;
+    username: string | null;
+    windowHeight: number;
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const TelegramAuthContext = createContext<TelegramAuthContextType | undefined>(undefined);
 
-export const AuthContextProvider = ({
-	children,
+export const TelegramAuthContextProvider = ({
+    children,
 }: {
-	children: React.ReactNode;
+    children: React.ReactNode;
 }) => {
-	const [windowHeight, setWindowHeight] = useState<number>(0);
-	const [userID, setUserID] = useState<number | null>(null);
-	const [username, setUsername] = useState<string | null>(null);
+    const [windowHeight, setWindowHeight] = useState<number>(0);
+    const [userID, setUserID] = useState<number | null>(null);
+    const [username, setUsername] = useState<string | null>(null);
 
-	useEffect(() => {
-		// Ensure this code only runs on the client side
-		if (typeof window !== 'undefined' && WebApp) {
-			WebApp.isVerticalSwipesEnabled = false;
-			setWindowHeight(WebApp.viewportStableHeight || window.innerHeight);
-			WebApp.ready();
+    useEffect(() => {
+        // Ensure this code only runs on the client side
+        if (typeof window !== 'undefined' && WebApp) {
+            WebApp.isVerticalSwipesEnabled = false;
+            setWindowHeight(WebApp.viewportStableHeight || window.innerHeight);
+            WebApp.ready();
 
-			// Set Telegram user data
-			const user = WebApp.initDataUnsafe.user;
-			setUserID(user?.id || null);
-			setUsername(user?.username || null);
-		}
-	}, []);
+            // Set Telegram user data
+            const user = WebApp.initDataUnsafe.user;
+            setUserID(user?.id || null);
+            setUsername(user?.username || null);
+        }
+    }, []);
 
-	const contextValue = {
-		userID,
-		username,
-		windowHeight,
-	};
+    const contextValue = {
+        userID,
+        username,
+        windowHeight,
+    };
 
-	return (
-		<AuthContext.Provider value={contextValue}>
-			{children}
-		</AuthContext.Provider>
-	);
+    return (
+        <TelegramAuthContext.Provider value={contextValue}>
+            {children}
+        </TelegramAuthContext.Provider>
+    );
 };
 
-export const useAuth = () => {
-	const context = useContext(AuthContext);
-	if (context === undefined) {
-		throw new Error('useAuth must be used within an AuthContextProvider');
-	}
-	return context;
+export const useTelegramAuth = () => {
+    const context = useContext(TelegramAuthContext);
+    if (context === undefined) {
+        throw new Error('useTelegramAuth must be used within a TelegramAuthContextProvider');
+    }
+    return context;
 };

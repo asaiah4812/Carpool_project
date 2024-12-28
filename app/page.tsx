@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth as useFlowAuth } from '@/context/AuthContext';
-import { useAuth as useTelegramAuth } from '@/context/TelegramAuthContext';
+import { useTelegramAuth } from '@/context/TelegramAuthContext';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Head from 'next/head';
