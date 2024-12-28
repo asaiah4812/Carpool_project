@@ -1,16 +1,18 @@
 'use client';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth as useFlowAuth } from '@/context/AuthContext';
+import { useAuth as useTelegramAuth } from '@/context/TelegramAuthContext';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Head from 'next/head';
 
 export default function Home() {
-  const auth = useAuth();
-  const loggedIn = auth?.loggedIn;
-  const logOut = auth?.logOut;
-  const logIn = auth?.logIn;
-  const user = auth?.user;
+  const flowAuth = useFlowAuth();
+  const telegramAuth = useTelegramAuth();
+  const loggedIn = flowAuth?.loggedIn;
+  const logOut = flowAuth?.logOut;
+  const logIn = flowAuth?.logIn;
+  const user = flowAuth?.user;
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
@@ -51,6 +53,11 @@ export default function Home() {
       <div className="mt-10">
         <p className="text-lg text-yellow-300 mt-4 drop-shadow-md">To Continue Please Connect Wallet</p>
       </div>
+      {telegramAuth?.username && (
+        <div>
+          <p className="text-lg text-white drop-shadow-md">Telegram Username: {telegramAuth.username}</p>
+        </div>
+      )}
       {loggedIn ? (
         <div>
           <p>Logged in as {user?.addr || "Unknown User"}</p>
