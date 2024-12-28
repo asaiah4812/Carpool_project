@@ -28,7 +28,7 @@ export default function Home() {
     try {
       setIsLoading(true);
       await logOut();
-    } catch (error) {
+    } catch {
       alert("Logout failed. Please try again.");
     } finally {
       setIsLoading(false);

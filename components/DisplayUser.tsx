@@ -5,7 +5,7 @@ import { useAuth } from '@/context/TelegramAuthContext';
 import { Button } from "@/components/ui/button"
 
 export default function DisplayUser() {
-	const { userID, username, windowHeight } = useAuth();
+	const { username } = useAuth();
 
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen text-center space-y-6 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-8">
