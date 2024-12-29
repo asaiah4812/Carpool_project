@@ -1,82 +1,38 @@
-'use client';
+"use client";
 
-import { useAuth as useFlowAuth } from '@/context/AuthContext';
-import { useTelegramAuth } from '@/context/TelegramAuthContext';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import Head from 'next/head';
+import { useAuth as useFlowAuth } from "@/context/AuthContext";
+import { useTelegramAuth } from "@/context/TelegramAuthContext";
+import Head from "next/head";
+import Image from "next/image";
 
 export default function Home() {
-  const flowAuth = useFlowAuth();
   const telegramAuth = useTelegramAuth();
-  const loggedIn = flowAuth?.loggedIn;
-  const logOut = flowAuth?.logOut;
-  const logIn = flowAuth?.logIn;
-  const user = flowAuth?.user;
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleLogin = async () => {
-    try {
-      setIsLoading(true);
-      await logIn();
-    } catch (error) {
-      alert("Login failed. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      setIsLoading(true);
-      await logOut();
-    } catch {
-      alert("Logout failed. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen text-center space-y-6 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-8">
+    <div className="min-h-screen">
       <Head>
         <title>SkillSwap: Web3 Learning Marketplace</title>
-        <meta name="description" content="SkillSwap: A Web3-based Peer-to-Peer Learning Marketplace focused on blockchain and decentralized technology skills." />
+        <meta
+          name="description"
+          content="SkillSwap: A Web3-based Peer-to-Peer Learning Marketplace focused on blockchain and decentralized technology skills."
+        />
       </Head>
-      <img src="/img/logo.png" alt="SkillSwap Logo" aria-label="SkillSwap Logo" width="150" className="mb-6 drop-shadow-lg"/>
-      <h1 className="text-5xl font-extrabold text-white drop-shadow-lg">
-        SkillSwap: A Web3-based Peer-to-Peer Learning Marketplace
-      </h1>
-      <p className="text-xl text-white drop-shadow-md">
-        Focusing on blockchain and decentralized technology skills.
-      </p>
-      <div className="mt-10">
-        <p className="text-lg text-yellow-300 mt-4 drop-shadow-md">To Continue Please Connect Wallet</p>
-      </div>
+
+      {/* Hero Section */}
+      <section className="relative py-20">
+        <div className="w-[90%] md:w-[350px] mx-auto relative h-[250px]">
+          <Image src="/bro.png" alt="SkillSwap Logo" fill={true} />
+        </div>
+        <div>
+          <h2 className="text-2xl lg:text-4xl font-bold text-btn text-center py-4">Carpool</h2>
+          <p className="text-center text-sm md:text-md text-gray-500 w-[90%] md:w-[400px] lg:w-[300px]  mx-auto">Join a transparent communication Driven ride sharing experience leveraging blockchain technology</p>
+        </div>
+      </section>
+
       {telegramAuth?.username && (
-        <div>
-          <p className="text-lg text-white drop-shadow-md">Telegram Username: {telegramAuth.username}</p>
+        <div className="text-center mt-4 text-gray-600">
+          Connected Telegram: @{telegramAuth.username}
         </div>
-      )}
-      {loggedIn ? (
-        <div>
-          <p>Logged in as {user?.addr || "Unknown User"}</p>
-          <Button 
-            disabled={isLoading} 
-            className={`mt-8 px-6 py-3 ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'} text-white rounded-lg shadow-lg`} 
-            onClick={handleLogout}
-          >
-            {isLoading ? "Logging Out..." : "Log Out"}
-          </Button>
-        </div>
-      ) : (
-        <Button 
-          disabled={isLoading} 
-          className={`mt-8 px-6 py-3 ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'} text-white rounded-lg shadow-lg`} 
-          onClick={handleLogin}
-        >
-          {isLoading ? "Connecting..." : "Connect Wallet"}
-        </Button>
       )}
     </div>
   );
